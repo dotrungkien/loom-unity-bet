@@ -3,5 +3,8 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
-  "author": "dotrungkien"
+  "author": "dotrungkien",
+  "dependencies": {
+    "loom-truffle-provider": "^0.13.0"
+  }
 }
