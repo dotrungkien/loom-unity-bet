@@ -77,6 +77,7 @@ public class Betting : MonoBehaviour
         });
 
         string abi = bettingABI.ToString();
+        Debug.Log("aaaaaaaaaaaaaaaaaa" + bettingAddress.ToString());
         var contractAddr = Address.FromHexString(bettingAddress.ToString());
         return new EvmContract(client, contractAddr, from, abi);
 

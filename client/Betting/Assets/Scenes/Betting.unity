@@ -1756,8 +1756,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99fee329726ea4140a96f5ba78ebbcb0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bettingABI: {fileID: 4900000, guid: 0ac41424e556141fe905ddc2a7f4e96e, type: 3}
+  bettingAddress: {fileID: 4900000, guid: 70cc04d0437da40eea21ba69624c002e, type: 3}
   lastWinNumber: {fileID: 354320192}
   myAddress: {fileID: 2107645034}
+  connectionStatus: {fileID: 450787292}
   numbers: []
 --- !u!1 &846890768
 GameObject:
