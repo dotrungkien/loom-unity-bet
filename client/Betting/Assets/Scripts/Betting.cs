@@ -17,6 +17,8 @@ public class Betting : MonoBehaviour
     public Text betNumber;
 
     public Button[] numbers;
+    public Text[] choosenNumbers;
+    public Text[] players;
 
     private byte[] privateKey;
     private byte[] publicKey;
@@ -30,6 +32,11 @@ public class Betting : MonoBehaviour
         {
             int j = i;
             numbers[j].onClick.AddListener(async () => await Bet(j + 1));
+        }
+        for (int i = 0; i < players.Length; i++)
+        {
+            players[i].text = "";
+            choosenNumbers[i].text = "";
         }
         contract = await GetContract();
         await UpdateLastWinNumber();
@@ -92,12 +99,30 @@ public class Betting : MonoBehaviour
         lastWinnerNumber.text = "" + lastWinNum;
     }
 
+    public async Task UpdatePlayers()
+    {
+        int numberOfBets = await contract.StaticCallSimpleTypeOutputAsync<int>("numberOfBets");
+        if (numberOfBets > 0)
+        {
+            for (int i = 0; i < numberOfBets; i++)
+            {
+                string player = await contract.StaticCallSimpleTypeOutputAsync<string>("players", i);
+                Debug.Log("Player " + (i + 1) + ": " + player);
+                // int choosenNumber = await contract.StaticCallSimpleTypeOutputAsync<int>("playerToNumber", player);
+                players[i].text = player;
+                // choosenNumbers[i].text = "" + choosenNumber;
+            }
+        }
+    }
+
+
     public async Task Bet(int number)
     {
         Debug.Log("bet number " + number);
         await contract.CallAsync("bet", number);
         betNumber.text = "" + number;
         await UpdateLastWinNumber();
+        await UpdatePlayers();
     }
 
     public async Task StaticCallContract(string func)

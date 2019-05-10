@@ -1772,6 +1772,14 @@ MonoBehaviour:
   - {fileID: 794212427}
   - {fileID: 1312432347}
   - {fileID: 929346681}
+  choosenNumbers:
+  - {fileID: 2093139143}
+  - {fileID: 145563557}
+  - {fileID: 152502580}
+  players:
+  - {fileID: 31825470}
+  - {fileID: 1163082793}
+  - {fileID: 285848967}
 --- !u!1 &846890768
 GameObject:
   m_ObjectHideFlags: 0
