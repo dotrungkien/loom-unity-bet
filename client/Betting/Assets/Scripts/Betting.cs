@@ -14,7 +14,7 @@ public class Betting : MonoBehaviour
 
     public Text lastWinnerNumber;
     public Text myAddress;
-    public Text connectionStatus;
+    public Text betNumber;
 
     public Button[] numbers;
 
@@ -26,25 +26,30 @@ public class Betting : MonoBehaviour
     async void Start()
     {
         Connect();
+        for (int i = 0; i < numbers.Length; i++)
+        {
+            int j = i;
+            numbers[j].onClick.AddListener(async () => await Bet(j + 1));
+        }
         contract = await GetContract();
         await UpdateLastWinNumber();
     }
 
     void Connect()
     {
-        connectionStatus.text = "Connecting";
-        string privateKeyHex = PlayerPrefs.GetString("privateKeyHex", "");
-        if (privateKeyHex != "")
-        {
-            privateKey = CryptoUtils.HexStringToBytes(privateKeyHex);
-        }
-        else
-        {
-            privateKey = CryptoUtils.GeneratePrivateKey();
-            privateKeyHex = CryptoUtils.BytesToHexString(privateKey);
-            PlayerPrefs.SetString("privateKeyHex", privateKeyHex);
-        }
+        // string privateKeyHex = PlayerPrefs.GetString("privateKeyHex", "");
+        // if (privateKeyHex != "")
+        // {
+        //     privateKey = CryptoUtils.HexStringToBytes(privateKeyHex);
+        // }
+        // else
+        // {
+        //     privateKey = CryptoUtils.GeneratePrivateKey();
+        //     privateKeyHex = CryptoUtils.BytesToHexString(privateKey);
+        //     PlayerPrefs.SetString("privateKeyHex", privateKeyHex);
+        // }
 
+        privateKey = CryptoUtils.GeneratePrivateKey();
         publicKey = CryptoUtils.PublicKeyFromPrivateKey(privateKey);
         from = Address.FromPublicKey(publicKey);
         myAddress.text = from.LocalAddressHexString;
@@ -85,6 +90,14 @@ public class Betting : MonoBehaviour
     {
         int lastWinNum = await contract.StaticCallSimpleTypeOutputAsync<int>("lastWinnerNumber");
         lastWinnerNumber.text = "" + lastWinNum;
+    }
+
+    public async Task Bet(int number)
+    {
+        Debug.Log("bet number " + number);
+        await contract.CallAsync("bet", number);
+        betNumber.text = "" + number;
+        await UpdateLastWinNumber();
     }
 
     public async Task StaticCallContract(string func)

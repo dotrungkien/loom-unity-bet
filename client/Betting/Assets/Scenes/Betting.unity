@@ -938,7 +938,7 @@ GameObject:
   - component: {fileID: 450787293}
   - component: {fileID: 450787292}
   m_Layer: 5
-  m_Name: Status
+  m_Name: Bet Number
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -996,7 +996,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: Not Connected
+  m_Text: 9
 --- !u!222 &450787293
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1757,11 +1757,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bettingABI: {fileID: 4900000, guid: 0ac41424e556141fe905ddc2a7f4e96e, type: 3}
-  bettingAddress: {fileID: 4900000, guid: 70cc04d0437da40eea21ba69624c002e, type: 3}
-  lastWinNumber: {fileID: 354320192}
+  bettingAddress: {fileID: 4900000, guid: 445bc914f4f7041c0853fede0698f747, type: 3}
+  lastWinnerNumber: {fileID: 354320192}
   myAddress: {fileID: 2107645034}
-  connectionStatus: {fileID: 450787292}
-  numbers: []
+  betNumber: {fileID: 450787292}
+  numbers:
+  - {fileID: 1454165967}
+  - {fileID: 1677052681}
+  - {fileID: 1403407539}
+  - {fileID: 1776962997}
+  - {fileID: 1155469669}
+  - {fileID: 1920439967}
+  - {fileID: 536861571}
+  - {fileID: 794212427}
+  - {fileID: 1312432347}
+  - {fileID: 929346681}
 --- !u!1 &846890768
 GameObject:
   m_ObjectHideFlags: 0
