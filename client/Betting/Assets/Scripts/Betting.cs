@@ -12,8 +12,7 @@ public class Betting : MonoBehaviour
     public TextAsset bettingABI;
     public TextAsset bettingAddress;
 
-
-    public Text lastWinNumber;
+    public Text lastWinnerNumber;
     public Text myAddress;
     public Text connectionStatus;
 
@@ -28,7 +27,7 @@ public class Betting : MonoBehaviour
     {
         Connect();
         contract = await GetContract();
-        await StaticCallContract("totalSlots");
+        await UpdateLastWinNumber();
     }
 
     void Connect()
@@ -54,18 +53,18 @@ public class Betting : MonoBehaviour
     async Task<EvmContract> GetContract()
     {
         var writer = RPCClientFactory.Configure()
-            .WithLogger(Debug.unityLogger)
+            // .WithLogger(Debug.unityLogger)
             .WithWebSocket("ws://127.0.0.1:46657/websocket")
             .Create();
 
         var reader = RPCClientFactory.Configure()
-            .WithLogger(Debug.unityLogger)
+            // .WithLogger(Debug.unityLogger)
             .WithWebSocket("ws://127.0.0.1:9999/queryws")
             .Create();
 
         var client = new DAppChainClient(writer, reader)
         {
-            Logger = Debug.unityLogger
+            // Logger = Debug.unityLogger
         };
 
         client.TxMiddleware = new TxMiddleware(new ITxMiddlewareHandler[]{
@@ -77,10 +76,15 @@ public class Betting : MonoBehaviour
         });
 
         string abi = bettingABI.ToString();
-        Debug.Log("aaaaaaaaaaaaaaaaaa" + bettingAddress.ToString());
         var contractAddr = Address.FromHexString(bettingAddress.ToString());
         return new EvmContract(client, contractAddr, from, abi);
 
+    }
+
+    public async Task UpdateLastWinNumber()
+    {
+        int lastWinNum = await contract.StaticCallSimpleTypeOutputAsync<int>("lastWinnerNumber");
+        lastWinnerNumber.text = "" + lastWinNum;
     }
 
     public async Task StaticCallContract(string func)
@@ -89,19 +93,9 @@ public class Betting : MonoBehaviour
         {
             throw new Exception("Not signed in!");
         }
-
         Debug.Log("Calling smart contract...");
-
         int result = await contract.StaticCallSimpleTypeOutputAsync<int>(func);
-        if (result != null)
-        {
-            Debug.Log("Smart contract returned: " + result);
-        }
-        else
-        {
-            Debug.LogError("Smart contract didn't return anything!");
-        }
-
+        Debug.Log("Smart contract returned: " + result);
     }
 
 }
