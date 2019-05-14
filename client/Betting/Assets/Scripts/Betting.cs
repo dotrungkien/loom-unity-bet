@@ -113,10 +113,9 @@ public class Betting : MonoBehaviour
             for (int i = 0; i < numberOfBets; i++)
             {
                 string player = await contract.StaticCallSimpleTypeOutputAsync<string>("players", i);
-                Debug.Log("Player " + (i + 1) + ": " + player);
-                // int choosenNumber = await contract.StaticCallSimpleTypeOutputAsync<int>("playerToNumber", player);
                 players[i].text = player;
-                // choosenNumbers[i].text = "" + choosenNumber;
+                int choosenNumber = await contract.StaticCallSimpleTypeOutputAsync<int>("playerToNumber", player);
+                choosenNumbers[i].text = "" + choosenNumber;
             }
         }
     }
