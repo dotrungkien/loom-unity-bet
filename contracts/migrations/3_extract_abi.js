@@ -2,16 +2,16 @@ const fs = require("fs")
 const path = require("path")
 const contracts = path.resolve(__dirname, "../build/contracts/")
 const unityAbis = path.resolve(__dirname, "../../client/Betting/Assets/Contracts/")
+const loomNetwork = "13654820909954"
 
 module.exports = async function(deployer, network, accounts) {
   let builtContracts = fs.readdirSync(contracts)
-  // loop over every contract
   builtContracts.forEach((contract) => {
-    // Get the JSON for a specific contract
+    if (contract === "Migrations.json") return
+    const name = contract.split(".")[0]
     let json = JSON.parse(fs.readFileSync(path.resolve(contracts, contract)))
-    // Extract just the abi
-    let { abi } = json
-    // Write the abi to a new file in the unityAbis directory
+    let { abi, networks } = json
     fs.writeFileSync(path.resolve(unityAbis, contract), JSON.stringify(json.abi))
+    fs.writeFileSync(path.resolve(unityAbis, name + "Address.txt"), networks[loomNetwork].address)
   })
 }

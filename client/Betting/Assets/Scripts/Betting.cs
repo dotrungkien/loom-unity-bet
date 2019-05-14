@@ -44,6 +44,7 @@ public class Betting : MonoBehaviour
         }
         contract = await GetContract();
         await UpdateLastWinNumber();
+        await UpdatePlayers();
     }
 
     void Connect()
@@ -150,15 +151,18 @@ public class Betting : MonoBehaviour
         public int BetNumber { get; set; }
     }
 
-    private void ContractEventReceived(object sender, EvmChainEventArgs e)
+    private async void ContractEventReceived(object sender, EvmChainEventArgs e)
     {
         Debug.LogFormat("Received smart contract event: " + e.EventName);
         if (e.EventName == "OnBet")
         {
-            OnBetEvent evt = e.DecodeEventDTO<OnBetEvent>();
-            Debug.Log("frommmmmmmmmmmmmmm" + evt.From);
-            Debug.Log("bettttttttttttttttttttttt" + evt.BetNumber);
-            Debug.Log("On eventaaaaaaaaaaaaaaaaaaaaaaaaa");
+            await UpdatePlayers();
+            // Debug.Log("On evenbbbbbbbbbbbb");
+            // OnBetEvent evt = e.DecodeEventDTO<OnBetEvent>();
+            // Debug.Log(evt);
+            // Debug.Log("frommmmmmmmmmmmmmm" + evt.From);
+            // Debug.Log("bettttttttttttttttttttttt" + evt.BetNumber);
+            // Debug.Log("On eventaaaaaaaaaaaaaaaaaaaaaaaaa");
         }
     }
 
