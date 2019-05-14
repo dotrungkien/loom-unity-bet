@@ -10,7 +10,7 @@ contract Betting {
     mapping(uint => address[]) public numberToPlayers;
     mapping(address => uint) public playerToNumber;
 
-    event OnBet(uint number);
+    event OnBet(address from, uint betNumber);
 
     constructor (uint _totalSlots) public {
         owner = msg.sender;
@@ -29,7 +29,7 @@ contract Betting {
         players.push(msg.sender);
         numberToPlayers[betNumber].push(msg.sender);
         numberOfBets += 1;
-        emit OnBet(betNumber);
+        emit OnBet(msg.sender, betNumber);
         if(numberOfBets >= totalSlots) {
             distributePrizes();
         }

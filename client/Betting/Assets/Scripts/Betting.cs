@@ -7,6 +7,10 @@ using Loom.Unity3d;
 using UnityEngine;
 using UnityEngine.UI;
 
+using Loom.Nethereum.ABI.FunctionEncoding;
+using Loom.Nethereum.ABI.FunctionEncoding.Attributes;
+using Loom.Nethereum.ABI.Model;
+
 public class Betting : MonoBehaviour
 {
     public TextAsset bettingABI;
@@ -89,8 +93,9 @@ public class Betting : MonoBehaviour
 
         string abi = bettingABI.ToString();
         var contractAddr = Address.FromHexString(bettingAddress.ToString());
-        return new EvmContract(client, contractAddr, from, abi);
-
+        EvmContract evmContract = new EvmContract(client, contractAddr, from, abi);
+        evmContract.EventReceived += ContractEventReceived;
+        return evmContract;
     }
 
     public async Task UpdateLastWinNumber()
@@ -134,6 +139,27 @@ public class Betting : MonoBehaviour
         Debug.Log("Calling smart contract...");
         int result = await contract.StaticCallSimpleTypeOutputAsync<int>(func);
         Debug.Log("Smart contract returned: " + result);
+    }
+
+    public class OnBetEvent
+    {
+        [Parameter("address", "from", 1)]
+        public int From { get; set; }
+
+        [Parameter("uint256", "betNumber", 2)]
+        public int BetNumber { get; set; }
+    }
+
+    private void ContractEventReceived(object sender, EvmChainEventArgs e)
+    {
+        Debug.LogFormat("Received smart contract event: " + e.EventName);
+        if (e.EventName == "OnBet")
+        {
+            OnBetEvent evt = e.DecodeEventDTO<OnBetEvent>();
+            Debug.Log("frommmmmmmmmmmmmmm" + evt.From);
+            Debug.Log("bettttttttttttttttttttttt" + evt.BetNumber);
+            Debug.Log("On eventaaaaaaaaaaaaaaaaaaaaaaaaa");
+        }
     }
 
 }
